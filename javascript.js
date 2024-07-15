@@ -1,16 +1,17 @@
 const videoCardContainer = document.querySelector(".videowrapper");
-const api_key = "AIzaSyDo-ok0Miqepy6caObxIPy8pw4IXaTgZ9k";
+const api_key = "Your Secret API key";
 const video_http = "https://www.googleapis.com/youtube/v3/videos?";
 const channel_http = "https://www.googleapis.com/youtube/v3/channels?";
 
-// Fetch the most popular videos
-const fetchPopularVideos = async () => {
+// Fetch gaming videos
+const fetchGamingVideos = async () => {
     try {
         const response = await fetch(video_http + new URLSearchParams({
             part: "snippet,contentDetails,statistics,player",
             chart: "mostPopular",
             maxResults: 40,
             regionCode: "IN",
+            videoCategoryId: "20", // Category ID for gaming
             key: api_key,
         }));
         const data = await response.json();
@@ -71,12 +72,13 @@ const makeVideoCard = (data) => {
 const formatViews = (viewCount) => {
     const numViews = parseInt(viewCount, 10);
     if (numViews >= 1e6) {
-        return (numViews / 1e5).toFixed(0) + 'M'; // Millions
+        return (numViews / 1e6).toFixed(0) + 'M'; // Millions
     } else if (numViews >= 1e3) {
-        return (numViews / 1e2).toFixed(0) + 'K'; // Thousands
+        return Math.floor(numViews / 1e3) + 'K'; // Thousands
     }
     return numViews; // Less than 1K
 };
+
 
 // Format upload time
 const formatUploadTime = (publishedAt) => {
@@ -94,4 +96,4 @@ const formatUploadTime = (publishedAt) => {
 };
 
 // Initialize fetching process
-fetchPopularVideos();
+fetchGamingVideos();
